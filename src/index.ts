@@ -36,7 +36,7 @@ async function main() {
     }
   );
 
-  // Register a simple "hello" tool
+  // Register tools (functions that can be called by the client)
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
       tools: [
@@ -54,6 +54,29 @@ async function main() {
             required: ["name"],
           },
         },
+        {
+          name: "calculate",
+          description: "Perform basic arithmetic calculations",
+          inputSchema: {
+            type: "object",
+            properties: {
+              operation: {
+                type: "string",
+                enum: ["add", "subtract", "multiply", "divide"],
+                description: "The arithmetic operation to perform",
+              },
+              a: {
+                type: "number",
+                description: "First number",
+              },
+              b: {
+                type: "number",
+                description: "Second number",
+              },
+            },
+            required: ["operation", "a", "b"],
+          },
+        },
       ],
     };
   });
@@ -63,12 +86,48 @@ async function main() {
     const { name, arguments: args } = request.params;
 
     if (name === "hello") {
-      const userName = args?.name as string || "World";
+      const userName = (args?.name as string) || "World";
       return {
         content: [
           {
             type: "text",
             text: `Hello, ${userName}! Welcome to MCP!`,
+          },
+        ],
+      };
+    }
+
+    if (name === "calculate") {
+      const operation = args?.operation as string;
+      const a = args?.a as number;
+      const b = args?.b as number;
+
+      let result: number;
+      switch (operation) {
+        case "add":
+          result = a + b;
+          break;
+        case "subtract":
+          result = a - b;
+          break;
+        case "multiply":
+          result = a * b;
+          break;
+        case "divide":
+          if (b === 0) {
+            throw new Error("Division by zero is not allowed");
+          }
+          result = a / b;
+          break;
+        default:
+          throw new Error(`Unknown operation: ${operation}`);
+      }
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: `${a} ${operation} ${b} = ${result}`,
           },
         ],
       };
