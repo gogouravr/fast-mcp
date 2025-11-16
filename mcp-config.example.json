@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "fast-mcp-demo": {
+      "command": "node",
+      "args": ["/absolute/path/to/fast-mcp/dist/index.js"],
+      "env": {}
+    }
+  }
+}
+
