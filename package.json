@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "tsx test-server.ts"
   },
   "keywords": ["mcp", "model-context-protocol", "typescript"],
   "author": "",
