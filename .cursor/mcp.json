@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "fast-mcp-demo": {
+      "command": "node",
+      "args": [
+        "/Users/gourav/Desktop/_projects/fast-mcp/dist/index.js"
+      ],
+      "env": {}
+    }
+  }
+}
+
