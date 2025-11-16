@@ -2,12 +2,9 @@
 
 /**
  * Entry point for the basic MCP server
+ * Re-exports the server for use as a module
  */
 
-export { main } from "./server.js";
-
-// If run directly, execute the server
-if (import.meta.url === `file://${process.argv[1]}`) {
-  import("./server.js").then((module) => module.default?.());
-}
+// Simply re-export - the server.ts file is the main entry point
+export * from "./server.js";
 
