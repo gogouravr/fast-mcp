@@ -11,11 +11,16 @@
     "clean": "rm -rf dist",
     "test": "tsx test-server.ts"
   },
-  "keywords": ["mcp", "model-context-protocol", "typescript"],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "typescript"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "fastmcp": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -23,4 +28,3 @@
     "typescript": "^5.3.3"
   }
 }
-
