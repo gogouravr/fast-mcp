@@ -5,6 +5,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
+  ListResourcesRequestSchema,
+  ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
 /**
@@ -24,6 +26,7 @@ async function main() {
     {
       capabilities: {
         tools: {},
+        resources: {},
       },
     }
   );
@@ -126,6 +129,65 @@ async function main() {
     }
 
     throw new Error(`Unknown tool: ${name}`);
+  });
+
+  // Register resources
+  server.setRequestHandler(ListResourcesRequestSchema, async () => {
+    return {
+      resources: [
+        {
+          uri: "demo://example",
+          name: "Example Resource",
+          description: "A simple example resource",
+          mimeType: "text/plain",
+        },
+        {
+          uri: "demo://config",
+          name: "Server Configuration",
+          description: "Current server configuration",
+          mimeType: "application/json",
+        },
+      ],
+    };
+  });
+
+  // Handle resource reading
+  server.setRequestHandler(ReadResourceRequestSchema, async (request) => {
+    const { uri } = request.params;
+
+    if (uri === "demo://example") {
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "text/plain",
+            text: "This is an example resource from the MCP server!",
+          },
+        ],
+      };
+    }
+
+    if (uri === "demo://config") {
+      return {
+        contents: [
+          {
+            uri,
+            mimeType: "application/json",
+            text: JSON.stringify(
+              {
+                serverName: "basic-mcp-server",
+                version: "0.1.0",
+                capabilities: ["tools", "resources"],
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unknown resource: ${uri}`);
   });
 
   // Connect to stdio transport
