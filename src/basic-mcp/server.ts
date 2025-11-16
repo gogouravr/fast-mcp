@@ -7,6 +7,8 @@ import {
   ListToolsRequestSchema,
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
+  ListPromptsRequestSchema,
+  GetPromptRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
 /**
@@ -27,6 +29,7 @@ async function main() {
       capabilities: {
         tools: {},
         resources: {},
+        prompts: {},
       },
     }
   );
@@ -177,7 +180,7 @@ async function main() {
               {
                 serverName: "basic-mcp-server",
                 version: "0.1.0",
-                capabilities: ["tools", "resources"],
+                capabilities: ["tools", "resources", "prompts"],
               },
               null,
               2
@@ -188,6 +191,66 @@ async function main() {
     }
 
     throw new Error(`Unknown resource: ${uri}`);
+  });
+
+  // Register prompts
+  server.setRequestHandler(ListPromptsRequestSchema, async () => {
+    return {
+      prompts: [
+        {
+          name: "greet_user",
+          description: "Generate a greeting message",
+          arguments: [
+            {
+              name: "name",
+              description: "The name of the person to greet",
+              required: true,
+            },
+          ],
+        },
+        {
+          name: "explain_mcp",
+          description: "Get an explanation of what MCP is",
+          arguments: [],
+        },
+      ],
+    };
+  });
+
+  // Handle prompt execution
+  server.setRequestHandler(GetPromptRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+
+    if (name === "greet_user") {
+      const userName = (args?.name as string) || "User";
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text: `Please create a friendly greeting for ${userName}. Make it warm and welcoming!`,
+            },
+          },
+        ],
+      };
+    }
+
+    if (name === "explain_mcp") {
+      return {
+        messages: [
+          {
+            role: "user",
+            content: {
+              type: "text",
+              text: "What is the Model Context Protocol (MCP)? Explain it in simple terms.",
+            },
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unknown prompt: ${name}`);
   });
 
   // Connect to stdio transport
