@@ -2,6 +2,10 @@
 
 A demonstration project to understand the Model Context Protocol (MCP) using TypeScript. This project implements a basic MCP server with tools, resources, and prompts.
 
+<a href="https://glama.ai/mcp/servers/@gogouravr/fast-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@gogouravr/fast-mcp/badge" alt="FastDemo MCP server" />
+</a>
+
 ## What is MCP?
 
 The Model Context Protocol (MCP) is a standardized protocol that enables AI assistants to securely access external data sources and tools. It provides a way for AI models to:
@@ -164,4 +168,3 @@ To extend this demo, consider:
 ## License
 
 MIT
-
