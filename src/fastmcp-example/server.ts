@@ -68,8 +68,10 @@ server.addResource({
   name: "Example Resource",
   description: "A simple example resource",
   mimeType: "text/plain",
-  getContent: async () => {
-    return "This is an example resource from the FastMCP server!";
+  async load() {
+    return {
+      text: "This is an example resource from the FastMCP server!",
+    };
   },
 });
 
@@ -84,17 +86,9 @@ server.addPrompt({
       required: true,
     },
   ],
-  getMessages: async (args) => {
+  load: async (args) => {
     const userName = args.name || "User";
-    return [
-      {
-        role: "user" as const,
-        content: {
-          type: "text" as const,
-          text: `Please create a friendly greeting for ${userName}. Make it warm and welcoming!`,
-        },
-      },
-    ];
+    return `Please create a friendly greeting for ${userName}. Make it warm and welcoming!`;
   },
 });
 
